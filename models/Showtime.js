@@ -6,7 +6,7 @@ const showtimeSchema = new mongoose.Schema({
     time: { type: String, required: true },
     seats: [{
         seatNumber: String,
-        status: { type: String, enum: ['available', 'reserved', 'selected'], default: 'available' }
+        status: { type: String, enum: ['available', 'reserved'], default: 'available' }
     }]
 }, { timestamps: true });
 

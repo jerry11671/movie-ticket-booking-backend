@@ -10,7 +10,11 @@ const userSchema = new mongoose.Schema({
         lowercase: true,
         match: [/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, 'Please provide valid email',], required: true, unique: true },
     password: { type: String, required: true },
-    bookings: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Booking' }]
+    bookings: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Booking' }],
+    role: {
+        type: String,
+        enum: ["admin", "viewer"],
+    }
 }, { timestamps: true });
 
 userSchema.pre('save', async function () {
@@ -23,6 +27,7 @@ userSchema.methods.createJWT = function () {
         name: this.name,
         id: this._id,
         email: this.email,
+        role: this.role
     }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_LIFETIME })
 }
 

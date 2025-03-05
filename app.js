@@ -13,7 +13,7 @@ const cors = require('cors')
 
 // routes
 const authRouter = require('./routes/authRouter');
-// const courseRouter = require('./routes/courses');
+const movieRouter = require('./routes/movieRouter');
 // const studentRouter = require('./routes/students');
 
 // error handler middleware
@@ -29,7 +29,7 @@ app.get('/healthcheck', (req, res) => {
 app.use(express.json());
 app.use(cors());
 app.use('/api/auth', authRouter);
-// app.use('/api/v1/courses', courseRouter);
+app.use('/api/movies', movieRouter);
 // app.use('/api/v1/students', studentAuthMiddleware, studentRouter);
 
 

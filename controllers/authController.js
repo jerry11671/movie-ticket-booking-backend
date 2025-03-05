@@ -4,9 +4,9 @@ const { BadRequestError, UnauthenticatedError, NotFoundError } = require("../err
 
 
 const register = async (req, res) => {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
 
-    if (!email || !name || !password) {
+    if (!email || !name || !password || !role) {
         throw new BadRequestError("Please provide all fields");
     }
 
@@ -16,7 +16,7 @@ const register = async (req, res) => {
         throw new BadRequestError("User with this email already exists");
     }
 
-    const user = new User({ name, email, password });
+    const user = new User({ name, email, password, role });
     await user.save()
     user.password = undefined;
     const token = user.createJWT();
@@ -34,7 +34,7 @@ const login = async (req, res) => {
         throw new BadRequestError("Please provide email and password to login");
     }
 
-    const user = await User.findOne({ email: email }).select("-password");
+    const user = await User.findOne({ email: email });
 
     if (!user) {
         throw new NotFoundError("User account does not exist");
@@ -47,6 +47,7 @@ const login = async (req, res) => {
     }
 
     const token = user.createJWT();
+    user.password = undefined;
 
     return res.status(StatusCodes.OK).json({
         success: true, status_code: 200, message: 'Login successful', data: { user, token: token }
