@@ -1,6 +1,7 @@
 const Showtime = require("../models/showtime");
 const { StatusCodes } = require("http-status-codes")
 const { NotFoundError } = require("../errors")
+const Movie = require("../models/showtime");
 
 // Get Showtimes for a specific movie
 const getShowtimesForMovie = async (req, res) => {
@@ -24,6 +25,13 @@ const getShowtimeById = async (req, res) => {
 // Create Showtime (Admin only)
 const createShowtime = async (req, res) => {
     const data = req.body
+
+    const movie = await Movie.findOne({ _id: data.movie })
+
+    if (!movie) {
+        throw new NotFoundError("Movie provided does not exist.")
+    }
+
     const showtime = new Showtime(data);
     await showtime.save();
     return res.status(StatusCodes.CREATED).json({ success: true, status_code: 201, message: "Showtime created successfully", data: showtime });
