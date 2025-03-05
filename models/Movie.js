@@ -9,6 +9,9 @@ const movieSchema = new mongoose.Schema({
     posterUrl: { type: String },
     trailerUrl: { type: String },
     status: { type: String, enum: ['Now Playing', 'Coming Soon', 'Top Movie'], required: true },
-}, { timestamps: true } );
+}, { timestamps: true });
+
+
+
 
 module.exports = mongoose.model('Movie', movieSchema);

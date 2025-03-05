@@ -15,7 +15,7 @@ const getAllMovies = async (req, res) => {
 
     const movies = await Movie.find(query)
 
-    return res.status(StatusCodes.OK).json({ success: true, status_code: 200, message: "Movie retrieved successfully", data: movies })
+    return res.status(StatusCodes.OK).json({ success: true, status_code: 200, message: "Movie retrieved successfully", data: { movies } })
 }
 
 
@@ -27,14 +27,14 @@ const getMovieById = async (req, res) => {
         throw new NotFoundError("Movie not found")
     }
 
-    return res.status(StatusCodes.OK).json({ success: true, status_code: 200, data: movie })
+    return res.status(StatusCodes.OK).json({ success: true, status_code: 200, data: { movie } })
 }
 
 
 const createMovie = async (req, res) => {
     const movie = new Movie(req.body);
     await movie.save()
-    return res.status(StatusCodes.CREATED).json({ success: true, status_code: 201, message: "Movie added successfully", data: movie })
+    return res.status(StatusCodes.CREATED).json({ success: true, status_code: 201, message: "Movie added successfully", data: { movie } })
 }
 
 
@@ -47,7 +47,7 @@ const updateMovie = async (req, res) => {
         throw NotFoundError("Movie not found")
     }
 
-    return res.status(StatusCodes.OK).json({ success: true, status_code: 200, message: "Movie updated successfully", data: movie })
+    return res.status(StatusCodes.OK).json({ success: true, status_code: 200, message: "Movie updated successfully", data: { movie } })
 }
 
 

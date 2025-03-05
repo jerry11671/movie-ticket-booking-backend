@@ -15,6 +15,8 @@ const cors = require('cors')
 const authRouter = require('./routes/authRouter');
 const movieRouter = require('./routes/movieRouter');
 const showtimeRouter = require('./routes/showtimeRouter');
+const bookingRouter = require('./routes/bookingRouter');
+
 
 // error handler middleware
 const errorHandlerMiddleware = require('./middlewares/error-handler')
@@ -31,6 +33,7 @@ app.use(cors());
 app.use('/api/auth', authRouter);
 app.use('/api/movies', movieRouter);
 app.use('/api/showtimes', showtimeRouter);
+app.use('/api/bookings', bookingRouter);
 
 
 app.use(notFoundMiddleware);
