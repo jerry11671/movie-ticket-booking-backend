@@ -32,6 +32,7 @@ const getMovieById = async (req, res) => {
 
 
 const createMovie = async (req, res) => {
+    const {} = req.body
     const movie = new Movie(req.body);
     await movie.save()
     return res.status(StatusCodes.CREATED).json({ success: true, status_code: 201, message: "Movie added successfully", data: { movie } })
