@@ -53,8 +53,10 @@ A backend application designed to help users book movie tickets. Admins can mana
    ```bash
    npm run dev
    ```
-5. Access the API: The server runs on ``` bash http://localhost:3000 (or your specified     PORT).```
+5. Access the API: The server runs on ``` bash http://localhost:3000 (or your specified PORT).```
 
+
+## Endpoints
 ### Authentication
 #### Register a new user
 ```http
@@ -142,6 +144,7 @@ PUT /api/bookings/:id/cancel
 
 
 ## Usage
+**The user has two roles - Admin and Viewer**
 - **Register/Login:** Use /api/auth endpoints to authenticate.
 
 - **Browse Movies:** Fetch movies and showtimes via /api/movies and /api/showtimes.
@@ -151,6 +154,16 @@ PUT /api/bookings/:id/cancel
 - **Manage Bookings:** View or cancel bookings with /api/bookings endpoints.
 
 - **Admin Tasks:** Use admin-only endpoints to manage movies and showtimes
+
+## Test Link
+npm test authRoute.test.js
+
+npm test courseRoute.test.js
+
+npm test studentRoute.test.js
+
+## Postman Published Link
+https://documenter.getpostman.com/view/33130441/2sAYdoDmsp
 
 ## Contributing
 - Fork the repository.
@@ -163,9 +176,8 @@ PUT /api/bookings/:id/cancel
 
 - Open a pull request.
 
-License
+## License
 This project is licensed under the MIT License.
-
 
 Contact
 For questions or feedback, reach out at [your-email@example.com (mailto:jerrygodson3@gmail.com)].

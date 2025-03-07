@@ -1,6 +1,7 @@
 const { StatusCodes } = require('http-status-codes');
 const User = require('../models/User');
 const { BadRequestError, UnauthenticatedError, NotFoundError } = require("../errors");
+const sendEmail = require("../utils/sendEmail")
 
 
 const register = async (req, res) => {
@@ -22,8 +23,11 @@ const register = async (req, res) => {
     const token = user.createJWT();
 
     // Email send funcionality
+    if (role === "viewer") {
+        sendEmail(user.email, "Confirmation Email", "Welcome to Movie Ticket Booking App, your account has been created");
+    }
 
-    res.status(StatusCodes.CREATED).json({ success: true, status_code: 201, message: 'Registration successful', data: { user, token: token } });
+    res.status(StatusCodes.CREATED).json({ success: true, status_code: 201, message: "Registration successful", data: { user, token: token } });
 }
 
 
@@ -50,7 +54,7 @@ const login = async (req, res) => {
     user.password = undefined;
 
     return res.status(StatusCodes.OK).json({
-        success: true, status_code: 200, message: 'Login successful', data: { user, token: token }
+        success: true, status_code: 200, message: "Login successful", data: { user, token: token }
     });
 }
 
