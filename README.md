@@ -1,10 +1,5 @@
 # movie-ticket-booking-backend
 
-
-markdown
-
-# Movie Ticket Booking
-
 A backend application designed to help users book movie tickets. Admins can manage movies and showtimes, while viewers can browse available showtimes, select seats, and book tickets securely. Built with Node.js, Express, MongoDB, and JWT authentication, this project provides a robust and scalable solution for movie ticket reservations.
 
 ## Features
@@ -32,144 +27,146 @@ A backend application designed to help users book movie tickets. Admins can mana
 - **Environment**: dotenv for configuration
 - **Others**: `express-async-errors`, `http-status-codes`, `cors`
 
-## Project Structure
-
-movie-ticket-booking/
-├── controllers/         # Route handlers
-│   ├── authController.js
-│   ├── bookingController.js
-│   ├── movieController.js
-│   └── showtimeController.js
-├── db/                  # Database connection
-│   └── connect.js
-├── errors/              # Custom error classes
-│   └── (assumed files)
-├── middlewares/         # Custom middleware
-│   ├── auth.js
-│   ├── adminAuth.js
-│   ├── error-handler.js
-│   ├── not-found.js
-│   └── validate.js
-├── models/              # Mongoose schemas
-│   ├── Booking.js
-│   ├── Movie.js
-│   ├── Showtime.js
-│   └── User.js
-├── routes/              # API routes
-│   ├── authRouter.js
-│   ├── bookingRouter.js
-│   ├── movieRouter.js
-│   └── showtimeRouter.js
-├── validator/           # Joi validation schemas
-│   ├── showtimeValidator.js
-│   └── userValidator.js
-├── helpers/             # Utility functions
-│   └── cloudinary.js
-├── app.js               # Main application file
-├── .env                 # Environment variables (not tracked)
-└── package.json         # Dependencies and scripts
-
-## Installation
-
-1. **Clone the Repository**:
+### Installation
+1. Clone the repository:
    ```bash
    git clone https://github.com/jerry11671/movie-ticket-booking-backend.git
-   cd movie-ticket-booking
+   cd e-learning-platform-api
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Create a `.env` file in the root directory and add:
+   ```env
+   MONGO_URI=your_mongodb_connection_string
+    JWT_SECRET=your_jwt_secret_key
+    JWT_LIFETIME=1d
+    PORT=3000
+    NODE_EMAIL_PASS=your_email_password
+    NODE_EMAIL_USER=your_email
+    CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+    CLOUDINARY_API_KEY=your_cloudinary_api_key
+    CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+   ```
+4. Start the server:
+   ```bash
+   npm run dev
+   ```
+5. Access the API: The server runs on ``` bash http://localhost:3000 (or your specified     PORT).```
 
-Install Dependencies:
-bash
+### Authentication
+#### Register a new user
+```http
+POST /api/auth/register
+```
 
-npm install
+#### Log in and receive a JWT
+```http
+POST /api/auth/login
+```
 
-Set Up Environment Variables:
-Create a .env file in the root directory with:
-plaintext
+### Movies
+#### Get all movies (filter by status)
+```http
+GET /api/movies
+```
 
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret_key
-JWT_LIFETIME=1d
-PORT=3000
-NODE_EMAIL_PASS=your_email_password
-NODE_EMAIL_USER=your_email
-CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
-CLOUDINARY_API_KEY=your_cloudinary_api_key
-CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+#### Get a specific movie
+```http
+GET /api/movies/:id
+```
 
-Run the Application:
-Development (with nodemon):
-bash
+#### Create a movie (admin only)
+```http
+POST /api/movies
+```
 
-npm run dev
+#### Update a movie (admin only)
+```http
+PUT /api/movies/:id
+```
 
-Production:
-bash
 
-npm start
+#### Delete a movie (admin only)
+```http
+DELETE /api/movies/:id
+```
 
-Access the API:
-The server runs on http://localhost:3000 (or your specified PORT).
+### Showtimes
+#### Get showtimes (optional movieId query)
+```http
+GET /api/showtimes
+```
 
-API Endpoints
-Authentication
-POST /api/auth/register - Register a new user
+#### Get a specific showtime
+```http
+GET /api/showtimes/:id
+```
 
-POST /api/auth/login - Log in and receive a JWT
+##### Create a showtime (admin only)
+```http
+POST /api/showtimes
+```
 
-Movies
-GET /api/movies - Get all movies (filter by status)
+#### Update a showtime (admin only)
+```http
+PUT /api/showtimes/:id
+```
 
-GET /api/movies/:id - Get a specific movie
+#### Delete a showtime (admin only)
+```http
+DELETE /api/showtimes/:id
+```
 
-POST /api/movies - Create a movie (admin only)
+### Bookings
+#### Get seats for a showtime
+```http
+GET /api/bookings/seats/:id
+```
 
-PUT /api/movies/:id - Update a movie (admin only)
+#### Create a booking
+```http
+POST /api/bookings
+```
 
-DELETE /api/movies/:id - Delete a movie (admin only)
+#### Get user’s bookings
+```http
+GET /api/bookings
+```
 
-Showtimes
-GET /api/showtimes - Get showtimes (optional movieId query)
+#### Cancel a booking
+```http
+PUT /api/bookings/:id/cancel
+```
 
-GET /api/showtimes/:id - Get a specific showtime
 
-POST /api/showtimes - Create a showtime (admin only)
+## Usage
+- **Register/Login:** Use /api/auth endpoints to authenticate.
 
-PUT /api/showtimes/:id - Update a showtime (admin only)
+- **Browse Movies:** Fetch movies and showtimes via /api/movies and /api/showtimes.
 
-DELETE /api/showtimes/:id - Delete a showtime (admin only)
+- **Book Tickets:** Check seat availability with GET /api/bookings/seats/:id, then book via POST /api/bookings.
 
-Bookings
-GET /api/bookings/seats/:id - Get seats for a showtime
+- **Manage Bookings:** View or cancel bookings with /api/bookings endpoints.
 
-POST /api/bookings - Create a booking
+- **Admin Tasks:** Use admin-only endpoints to manage movies and showtimes
 
-GET /api/bookings - Get user’s bookings
+## Contributing
+- Fork the repository.
 
-PUT /api/bookings/:id/cancel - Cancel a booking
+- Create a feature branch (git checkout -b feature/your-feature).
 
-Usage
-Register/Login: Use /api/auth endpoints to authenticate.
+- Commit changes (git commit -m "Add your feature").
 
-Browse Movies: Fetch movies and showtimes via /api/movies and /api/showtimes.
+- Push to the branch (git push origin feature/your-feature).
 
-Book Tickets: Check seat availability with GET /api/bookings/seats/:id, then book via POST /api/bookings.
-
-Manage Bookings: View or cancel bookings with /api/bookings endpoints.
-
-Admin Tasks: Use admin-only endpoints to manage movies and showtimes.
-
-Contributing
-Fork the repository.
-
-Create a feature branch (git checkout -b feature/your-feature).
-
-Commit changes (git commit -m "Add your feature").
-
-Push to the branch (git push origin feature/your-feature).
-
-Open a pull request.
+- Open a pull request.
 
 License
 This project is licensed under the MIT License.
+
+
 Contact
 For questions or feedback, reach out at [your-email@example.com (mailto:jerrygodson3@gmail.com)].
 
