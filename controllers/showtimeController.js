@@ -22,6 +22,7 @@ const getShowtimeById = async (req, res) => {
     return res.status(StatusCodes.OK).json({ success: true, status_code: 200, message: "Showtime retrieved successfully", data: { showtime } });
 };
 
+
 // Create Showtime (Admin only)
 const createShowtime = async (req, res) => {
     const data = req.body

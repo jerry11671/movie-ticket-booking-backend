@@ -8,10 +8,13 @@ const adminAuth = require("../middlewares/adminAuth");
 const validate = require("../middlewares/validate");
 const { movieSchema, updateMovieSchema } = require("../validator/movieValidator")
 
+// Cloudinary uploader 
+const upload = require("../middlewares/upload")
+
 
 router.get("/", getAllMovies);
 router.get("/:id", authMiddleware, getMovieById);
-router.post("/", adminAuth, validate(movieSchema), createMovie) // Create movie
+router.post("/", adminAuth,  upload, createMovie) // Create movie
 router.put("/:id", adminAuth, validate(updateMovieSchema), updateMovie) // Update movie
 router.delete("/:id", adminAuth, deleteMovie) // Delete movie
 

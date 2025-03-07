@@ -8,9 +8,9 @@ const userSchema = new mongoose.Schema({
         type: String, unique: true,
         trim: true,
         lowercase: true,
-        match: [/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, 'Please provide valid email',], required: true, unique: true },
+        match: [/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/, 'Please provide valid email',], required: true, unique: true
+    },
     password: { type: String, required: true },
-    bookings: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Booking' }],
     role: {
         type: String,
         enum: ["admin", "viewer"],

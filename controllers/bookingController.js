@@ -1,22 +1,57 @@
 const Booking = require('../models/Booking');
 const Showtime = require("../models/Showtime");
 const { StatusCodes } = require("http-status-codes");
+const { BadRequestError } = require("../errors")
+
+
+const getSeatsForShowtime = async (req, res) => {
+    const { id: showtimeId } = req.params;
+    const showtime = await Showtime.find({ _id: showtimeId })
+
+    if (!showtime) {
+        throw new NotFoundError("Showtime does not exist.")
+    }
+
+    return res.status(StatusCodes.OK).json({ success: true, status_code: 200, message: "Seats retrieved successfully", data: { seats: showtime[0].seats } })
+}
 
 // Create Booking
 const createBooking = async (req, res) => {
-    const { showtimeId, seats } = req.body;
+    const { showtimeId, seatNumbers } = req.body;
     const showtime = await Showtime.findById(showtimeId);
 
     if (!showtime) {
         throw new NotFoundError("Showtime not found.");
     }
 
+    // Check seat availabiity
+    const requestedSeats = showtime.seats.filter(seat =>
+        seatNumbers.includes(seat.seatNumber)
+    )
+
+
+    // Verify all requested seats exist
+    if (requestedSeats.length !== seatNumbers.length) {
+        throw new BadRequestError("Some requested seats don't exist");
+    }
+
+
+    // Check if any requested seat is already reserved
+    const unavailableSeats = requestedSeats.filter(seat =>
+        seat.status === "reserved"
+    );
+
+    if (unavailableSeats.length > 0) {
+        const unavailableSeatNumbers = unavailableSeats.map(seat => seat.seatNumber);
+        throw new BadRequestError(`Seats ${unavailableSeatNumbers.join(', ')} is already reserved`);
+    }
+
     const seatPrices = 1500;  // Assume each seat costs 1500
-    const totalPrice = seats.length * seatPrices;
+    const totalPrice = seatNumbers.length * seatPrices;
 
     // Update seat statuses
     showtime.seats = showtime.seats.map(seat => {
-        if (seats.includes(seat.seatNumber)) {
+        if (seatNumbers.includes(seat.seatNumber)) {
             return { ...seat, status: 'reserved' };
         }
         return seat;
@@ -28,7 +63,7 @@ const createBooking = async (req, res) => {
         user: req.user.id,
         movie: showtime.movie,
         showtime: showtime._id,
-        seats,
+        seats: seatNumbers,
         totalPrice,
     });
 
@@ -40,7 +75,7 @@ const createBooking = async (req, res) => {
 const getUserBookings = async (req, res) => {
     const { id: userId } = req.user
     const bookings = await Booking.find({ user: userId }).populate('movie showtime');
-    res.status(StatusCodes.OK).json({ success: true, status_code: 200, message: "Bookings retreived sucessfully", data: { bookings } });
+    res.status(StatusCodes.OK).json({ success: true, status_code: 200, message: bookings.length > 0 ? "Bookings retrieved sucessfully" : "No Booking for this user", data: { bookings } });
 };
 
 // Cancel Booking
@@ -72,4 +107,4 @@ const cancelBooking = async (req, res) => {
     res.status(StatusCodes.OK).json({ success: true, status_code: 200, message: 'Booking cancelled' });
 };
 
-module.exports = { createBooking, getUserBookings, cancelBooking };
+module.exports = { getSeatsForShowtime, createBooking, getUserBookings, cancelBooking };

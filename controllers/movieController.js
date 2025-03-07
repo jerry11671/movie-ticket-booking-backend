@@ -1,7 +1,8 @@
 const Movie = require("../models/Movie")
 const User = require("../models/User")
 const { StatusCodes } = require("http-status-codes");
-const { NotFoundError } = require("../errors")
+const { NotFoundError, BadRequestError } = require("../errors")
+const cloudinary = require("../helpers/cloudinary")
 
 
 
@@ -32,9 +33,28 @@ const getMovieById = async (req, res) => {
 
 
 const createMovie = async (req, res) => {
-    const {} = req.body
-    const movie = new Movie(req.body);
+    const { title, description, genre, duration, releaseDate, status, poster, trailer } = req.body
+    const { files } = req;
+
+    const existingMovie = await Movie.findOne({ title: title })
+    
+    if (existingMovie) {
+        throw new BadRequestError("Movie already exists.")
+    }
+
+    const posterUploadResult = await cloudinary.uploader.upload(files.poster[0].path, {
+        resource_type: "image",
+        folder: "movie_posters"
+    });
+
+    const trailerUploadResult = await cloudinary.uploader.upload(files.trailer[0].path, {
+        resource_type: "video",
+        folder: "movie_trailers"
+    });
+
+    const movie = new Movie({ title, description, genre, duration, releaseDate, status, posterUrl: posterUploadResult.url, trailerUrl: trailerUploadResult.url })
     await movie.save()
+
     return res.status(StatusCodes.CREATED).json({ success: true, status_code: 201, message: "Movie added successfully", data: { movie } })
 }
 
