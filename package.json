@@ -1,10 +1,11 @@
 {
   "name": "movie-ticket-booking-backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A backend application designed to help users book movie tickets. Admins can manage movies and showtimes, while viewers can browse available showtimes, select seats, and book tickets securely. Built with Node.js, Express, MongoDB, and JWT authentication, this project provides a robust and scalable solution for movie ticket reservations.",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "test": "jest --detectOpenHandles",
     "dev": "nodemon app.js"
   },
   "keywords": [],
@@ -27,6 +28,7 @@
   },
   "devDependencies": {
     "jest": "^29.7.0",
+    "mongodb-memory-server": "^10.1.4",
     "nodemon": "^3.1.9",
     "supertest": "^7.0.0"
   }

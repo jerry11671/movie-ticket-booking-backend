@@ -24,7 +24,7 @@ const notFoundMiddleware = require('./middlewares/not-found');
 
 
 app.get('/healthcheck', (req, res) => {
-    res.status(StatusCodes.OK).json({ status: 'active', docs: "" });
+    res.status(StatusCodes.OK).json({ status: 'active', docs: "https://documenter.getpostman.com/view/33130441/2sAYdoDmsp" });
 })
 
 // middlewares
