@@ -16,7 +16,7 @@ const getAllMovies = async (req, res) => {
 
     const movies = await Movie.find(query)
 
-    return res.status(StatusCodes.OK).json({ success: true, status_code: 200, message: "Movie retrieved successfully", data: { movies } })
+    return res.status(StatusCodes.OK).json({ success: true, status_code: 200, message: movies.length ? "Movie retrieved successfully" : "No movie found", data: { movies } })
 }
 
 
@@ -33,13 +33,13 @@ const getMovieById = async (req, res) => {
 
 
 const createMovie = async (req, res) => {
-    const { title, description, genre, duration, releaseDate, status, poster, trailer } = req.body
+    const { title, description, genre, duration, releaseDate, status } = req.body
     const { files } = req;
 
     const existingMovie = await Movie.findOne({ title: title })
-    
+
     if (existingMovie) {
-        throw new BadRequestError("Movie already exists.")
+        throw new BadRequestError("Movie with the same name already exists.")
     }
 
     const posterUploadResult = await cloudinary.uploader.upload(files.poster[0].path, {
@@ -65,7 +65,7 @@ const updateMovie = async (req, res) => {
     const movie = await Movie.findByIdAndUpdate({ _id: movieId }, updateData, { new: true })
 
     if (!movie) {
-        throw NotFoundError("Movie not found")
+        throw new NotFoundError("Movie not found")
     }
 
     return res.status(StatusCodes.OK).json({ success: true, status_code: 200, message: "Movie updated successfully", data: { movie } })
@@ -75,11 +75,13 @@ const updateMovie = async (req, res) => {
 const deleteMovie = async (req, res) => {
     const { id: movieId } = req.params
 
-    const movie = await Movie.findOne({ _id: movieId }).deleteOne()
+    const movie = await Movie.findOne({ _id: movieId })
 
     if (!movie) {
-        throw NotFoundError("Movie not found")
+        throw new NotFoundError("Movie not found")
     }
+
+    await movie.deleteOne();
 
     return res.status(StatusCodes.OK).json({ success: true, status_code: 200, message: "Movie deleted successfully" })
 }
