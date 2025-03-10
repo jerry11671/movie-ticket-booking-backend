@@ -23,8 +23,8 @@ const upload = multer({
     limits: { fileSize: 20000000 }, // 20MB limit
     fileFilter: fileFilter
 }).fields([
-    { name: 'poster', maxCount: 1 },
-    { name: 'trailer', maxCount: 1 }
+    { name: "poster", maxCount: 1 },
+    { name: "trailer", maxCount: 1 }
 ]);
 
 

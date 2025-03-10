@@ -17,7 +17,7 @@ const getShowtimeById = async (req, res) => {
     const { id: showtimeId } = req.params;
     const showtime = await Showtime.findById(showtimeId).populate('movie');
     if (!showtime) {
-        return NotFoundError("Showtime not found")
+        throw new NotFoundError("Showtime not found")
     }
     return res.status(StatusCodes.OK).json({ success: true, status_code: 200, message: "Showtime retrieved successfully", data: { showtime } });
 };
