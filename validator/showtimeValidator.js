@@ -23,7 +23,7 @@ const updateShowtimeSchema = Joi.object({
             status: Joi.string().valid('available', 'reserved', 'selected')
         })
     )
-}).min(1);
+});
 
 
 

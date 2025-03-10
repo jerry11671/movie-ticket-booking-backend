@@ -12,7 +12,7 @@ const getSeatsForShowtime = async (req, res) => {
         throw new NotFoundError("Showtime does not exist.")
     }
 
-    return res.status(StatusCodes.OK).json({ success: true, status_code: 200, message: "Seats retrieved successfully", data: { seats: showtime[0].seats } })
+    return res.status(StatusCodes.OK).json({ success: true, status_code: 200, message: showtime.length > 0 ? "Seats retrieved successfully" : "No seats for this showtime", data: { seats: showtime.length > 0 ? showtime[0].seats : [] } })
 }
 
 // Create Booking
@@ -85,10 +85,6 @@ const cancelBooking = async (req, res) => {
 
     if (!booking) {
         throw new NotFoundError("Booking not found.")
-    }
-
-    if (booking.user.toString() !== req.user.id.toString()) {
-        throw new UnauthenticatedError("Not authorized")
     }
 
     booking.status = 'cancelled';
